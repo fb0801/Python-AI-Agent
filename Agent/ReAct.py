@@ -46,3 +46,34 @@ def should_continue(state: AgentState):
 
 graph = StateGraph(AgentState)
 graph.add_node("our_agent", model_call)
+
+
+tool_node = Toolnode(tools=tools)
+graph.add_node("tools", tool_node)
+
+graph.set_entry_point("our_agent")
+
+graph.add_conditional_edges(
+    "our_agent",
+    should_continue,
+    {
+        "continue": "tools",
+        "end": END
+    },
+)
+
+graph.add_edge("tools", "our_agent")
+app = graph.compile()
+
+
+def print_stream(stream):
+    for s in stream:
+        message = s["message"][-1]
+        if isinstance(message, tuple):
+            print(message)
+        else:
+            message.pretty_print()
+
+inputs = {'messages': [("user", "Add 3 + 4.")]}
+print_stream(app.stream(inputs, stream_mode="values"))
+
