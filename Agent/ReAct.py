@@ -20,10 +20,23 @@ class AgentState(TypedDict):
 
 @tool
 def add(a: int, b:int):
+    """This is an additon function that adds 2 numbers together"""
 
     return a + b
 
-tools = [add]
+@tool
+def subtract(a: int, b:int):
+    """This is an subtraction function that adds 2 numbers together"""
+
+    return a - b
+
+@tool
+def multiply(a: int, b:int):
+    """This is an multiply function that adds 2 numbers together"""
+
+    return a * b
+
+tools = [add, subtract, multiply]
 
 model = ChatOpenAI(model= 'gpt-4o').bind_tools(tools)
 
@@ -74,6 +87,6 @@ def print_stream(stream):
         else:
             message.pretty_print()
 
-inputs = {'messages': [("user", "Add 3 + 4.")]}
+inputs = {'messages': [("user", "Add 3 + 4. Add 3 + 4.")]}
 print_stream(app.stream(inputs, stream_mode="values"))
 
