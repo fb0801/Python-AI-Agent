@@ -51,3 +51,4 @@ tools = [update, save]
 
 model = ChatOpenAI(model = 'gpt-4o').bind_tools(tools)
 
+def our_agent(state: AgentState) -> AgentState:
